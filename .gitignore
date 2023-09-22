@@ -1,3 +1,4 @@
 #ingore specific files
 
 *.blend1
+*.log
