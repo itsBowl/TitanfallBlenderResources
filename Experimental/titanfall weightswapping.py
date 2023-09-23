@@ -74,7 +74,7 @@ weightList = [
 
 #Weights undefined in rigify
 #Bound to nearest match on rigify rig
-w = [
+retarget = [
     ['def_l_shoulderTwist', 'DEF-upper_arm.L'], 
     ['def_l_elbowB', 'def_l_elbowB'], #I am yet to find a model that uses this binding
     ['def_l_finRingCarpal', 'def_l_finRingCarpal'], #This requires reweighting the hand
@@ -84,6 +84,19 @@ w = [
     ['def_r_elbowB', 'def_r_elbowB'],
     ['def_r_finRingCarpal', 'def_r_finRingCarpal'],
     ['def_r_kneeB', 'DEF-thigh.R'],
+
+]
+
+retarget = [
+    ['def_l_shoulderTwist', 'def_l_shoulder'], 
+    ['def_l_elbowB', 'def_l_elbowB'], #I am yet to find a model that uses this binding
+    ['def_l_finRingCarpal', 'def_l_finRingCarpal'], #This requires reweighting the hand
+    ['def_l_kneeB', 'def_l_knee'],
+
+    ['def_r_shoulderTwist', 'def_r_shoulder'],
+    ['def_r_elbowB', 'def_r_elbowB'],
+    ['def_r_finRingCarpal', 'def_r_finRingCarpal'],
+    ['def_r_kneeB', 'def_r_knee'],
 
 ]
 
@@ -101,7 +114,7 @@ for n in weightList:
 
 #Rebinding undefined in rigify weights to the rigify rig
 i = 0
-for n in w:
+for n in retarget:
     for m in v:
         if m.name in n[0]:
             print("found " + m.name + " and " + n[0])
