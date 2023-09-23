@@ -72,6 +72,21 @@ weightList = [
     ['def_c_head', 'DEF-spine.006'],
 ]
 
+#Weights undefined in rigify
+#Bound to nearest match on rigify rig
+w = [
+    ['def_l_shoulderTwist', 'DEF-upper_arm.L'], 
+    ['def_l_elbowB', 'def_l_elbowB'], #I am yet to find a model that uses this binding
+    ['def_l_finRingCarpal', 'def_l_finRingCarpal'], #This requires reweighting the hand
+    ['def_l_kneeB', 'DEF-thigh.L'],
+
+    ['def_r_shoulderTwist', 'DEF-upper_arm.R'],
+    ['def_r_elbowB', 'def_r_elbowB'],
+    ['def_r_finRingCarpal', 'def_r_finRingCarpal'],
+    ['def_r_kneeB', 'DEF-thigh.R'],
+
+]
+
 
 print("===New Run===")
 
@@ -79,8 +94,31 @@ obj= bpy.context.active_object
 
 v = obj.vertex_groups
 
+#Rebinding to the rigify rig
 for n in weightList:
     if n[0] in v:
         v[n[0]].name = n[1]
+
+#Rebinding undefined in rigify weights to the rigify rig
+i = 0
+for n in w:
+    for m in v:
+        if m.name in n[0]:
+            print("found " + m.name + " and " + n[0])
+            for id, vert in enumerate(obj.data.vertices):
+                available_groups = [v_group_elem.group for v_group_elem in vert.groups]
+                A = B = 0
+                if obj.vertex_groups[m.name].index in available_groups:
+                    A = obj.vertex_groups[m.name].weight(id)
+                if obj.vertex_groups[n[0]].index in available_groups:
+                    B = obj.vertex_groups[n[0]].weight(id)
+
+                # only add to vertex group is weight is > 0
+                sum = A + B
+                if sum > 0:
+                    m.add([id], sum ,'REPLACE')
+
+
+
 
 print("===End Run===")
